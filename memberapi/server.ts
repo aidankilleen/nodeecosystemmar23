@@ -6,14 +6,15 @@ import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-
+import helmet from 'helmet';
+import https from 'https';
+import fs from 'fs';
 
 const prisma = new PrismaClient()
 
 dotenv.config();
 
-
-const port = 80;
+const port = 443;  // default port for https
 const expiresIn = "1h";
 const SECRET_KEY:string = `${process.env["SECRET_KEY"]}`;
 const baseUrl = `/api/members`;
@@ -22,6 +23,7 @@ const server = express();
 
 server.use(express.static('public'));
 server.use(bodyParser.json());
+server.use(helmet());
 
 
 // install auth middleware 
@@ -212,9 +214,21 @@ server.delete(`${baseUrl}/:id`, async (req, res) => {
     
 });
 
+/*
 server.listen(port, ()=> {
     console.log(`Server started - listening on port ${port}`);
 });
+*/
+
+const options = {
+    key: fs.readFileSync(`./security/cert.key`), 
+    cert: fs.readFileSync(`./security/cert.pem`)
+}
+https.createServer(options, server)
+    .listen(port, () => {
+        console.log("Server running using https");
+    });
+
 
 
 

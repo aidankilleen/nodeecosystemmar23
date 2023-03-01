@@ -1,0 +1,18 @@
+[req]
+distinguished_name = modernweb.ie
+x509_extensions = v3_req
+prompt = no
+[modernweb.ie]
+C = IE
+ST = Cork
+L = Cork
+O = Professional Training
+OU = Web Development
+CN = www.modernweb.ie
+[v3_req]
+keyUsage = critical, digitalSignature, keyAgreement
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = www.modernweb.ie
+DNS.2 = modernweb.ie
