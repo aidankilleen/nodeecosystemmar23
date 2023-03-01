@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+  id          Int           @id @default(autoincrement())
+  name        String
+  email       String?       @unique
+  active      Boolean       @default(false)
+  SalesRecord SalesRecord[]
+}
+
+model SalesRecord {
+  id       Int      @id @default(autoincrement())
+  memberId Int
+  product  String
+  colour   String
+  quantity Int
+  date     DateTime @default(now())
+  Member   Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id      Int     @id @default(autoincrement())
+  name    String
+  email   String
+  company String?
+  hash    String?
+}
