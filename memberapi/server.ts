@@ -3,12 +3,19 @@ console.log("Server Starting");
 import express from 'express';
 import bodyParser from 'body-parser';
 import { PrismaClient } from '@prisma/client'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
 
 const prisma = new PrismaClient()
 
+dotenv.config();
+
+
 const port = 80;
+const expiresIn = "1h";
+const SECRET_KEY:string = `${process.env["SECRET_KEY"]}`;
 const baseUrl = `/api/members`;
 
 const server = express();
@@ -16,6 +23,118 @@ const server = express();
 server.use(express.static('public'));
 server.use(bodyParser.json());
 
+
+// install auth middleware 
+// ignore the /auth/ endpoints
+server.use(/^(?!\/auth).*$/, (req, res, next) => {
+    let status = 200;
+    let message = "";
+
+    if (req.headers.authorization == undefined) {
+        status = 401;
+        message = "not authorized";
+        return res.status(status).json({status, message});
+    }
+
+    let pieces = req.headers.authorization.split(' ');
+
+    if (pieces.length != 2 || pieces[0] != "Bearer") {
+        status = 401;
+        message = "bearer token missing";
+        return res.status(status).json({status, message});
+    }
+
+    let token = pieces[1];
+    if (!verifyToken(token)) {
+        status = 401;
+        message = "token authentication failed";
+        return res.status(status).json({status, message});
+    }
+
+    next();
+});
+
+function createToken(payload: any) {
+    return jwt.sign(payload, SECRET_KEY, {expiresIn});
+}
+
+function verifyToken(token: string) {
+
+    try {
+        return jwt.verify(token, SECRET_KEY);
+    } catch(ex) {
+        return false;
+    }
+}
+
+async function authenticate(password:string, hash: string) {
+
+    let result = await bcrypt.compare(password, hash);
+    return result;
+}
+
+// auth methods
+server.post("/auth/login", async (req, res) => {
+
+    let credentials = req.body;
+    let status = 200;
+    let message = "";
+
+    let user;
+
+    try {
+        user = await prisma.user.findFirstOrThrow({
+            where: {
+                email: credentials.email ? credentials.email : ""
+            }
+        });
+    } catch(ex) {
+        status =401;
+        message = "invalid credentials";
+        return res.status(status).json({status, message});
+    }
+
+    if (! await authenticate(credentials.password, `${user?.hash}`)) {
+
+        status = 401;
+        message = "invalid credentials";
+        return res.status(status).json({status, message});
+    }
+
+    // produce JWT
+    const {hash, ...payload} = user;
+    let token = createToken(payload);
+
+    return res.json({token});
+    
+});
+
+server.post("/auth/register", async (req, res) => {
+
+    const userData = req.body;
+    const {password, ...user} = userData;
+
+    let status: number = 200;
+    let message: string = "";
+
+    user.hash = await bcrypt.hash(password, 12);
+
+    try {
+        let addedUser = await prisma.user.create({
+            data: user
+        });
+        return res.json(addedUser);
+    
+    } catch(ex) {
+
+        status = 400;
+        message = "Can't register new user"
+        return res.status(400).json({status, message});
+    }
+});
+
+
+// api methods
 server.get(baseUrl, async (req, res) => {
 
     let members = await prisma.member.findMany();
@@ -64,21 +183,11 @@ server.put(`${baseUrl}/:id`, async (req, res) => {
     return res.json(userToUpdate);
 });
 
-
-
 server.delete(`${baseUrl}/:id`, async (req, res) => {
 
     const id = parseInt(req.params.id);
 
     try {
-
-        // delete related records first
-        //await prisma.salesrecord.deleteMany ({
-        //    where: {
-        //        memberId: id
-        //    }
-        //})
-
         const member = await prisma.member.delete({
             where: { id }
         }) ;
@@ -103,9 +212,7 @@ server.delete(`${baseUrl}/:id`, async (req, res) => {
     
 });
 
-
 server.listen(port, ()=> {
-
     console.log(`Server started - listening on port ${port}`);
 });
 
