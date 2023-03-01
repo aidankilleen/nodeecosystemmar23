@@ -1,0 +1,40 @@
+{
+  "members": [
+    {
+      "id": 1,
+      "name": "Alice",
+      "email": "alice@gmail.com",
+      "active": true
+    },
+    {
+      "id": 2,
+      "name": "Bob",
+      "email": "bob@gmail.com",
+      "active": true
+    },
+    {
+      "id": 3,
+      "name": "Carol",
+      "email": "carol@gmail.com",
+      "active": true
+    },
+    {
+      "id": 4,
+      "name": "Dan",
+      "email": "dan@gmail.com",
+      "active": false
+    },
+    {
+      "name": "New Member",
+      "email": "new.member@gmail.com",
+      "active": true,
+      "id": 5
+    }
+  ], 
+  "records": [
+    {"id":1, "userId":1, "colour":"red", "quantity":5, "name":"Car"}, 
+    {"id":2, "userId":1, "colour":"green", "quantity":15, "name":"Bus"}, 
+    {"id":3, "userId":2, "colour":"blue", "quantity":25, "name":"Car"}, 
+    {"id":4, "userId":1, "colour":"red", "quantity":7, "name":"Train"}
+  ]
+}

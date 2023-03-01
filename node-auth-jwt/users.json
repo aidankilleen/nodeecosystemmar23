@@ -1,0 +1,11 @@
+{
+    "users": [
+        {
+            "name": "Aidan Killeen",
+            "company": "Professional Training Ltd",
+            "email": "aidan.killeen@gmail.com",
+            "id": 1,
+            "hash": "$2b$12$e2EIEtiM6EHtUSII1AjsDeukpxeXgp9PK8bCKp.fFBPOrrCsJxdGq"
+        }
+    ]
+}

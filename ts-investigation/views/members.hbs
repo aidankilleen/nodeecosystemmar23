@@ -1,0 +1,28 @@
+<div>
+
+    <h1>Members page</h1>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {{#each members}}
+                <tr>
+                    <td>{{ id }}</td>
+                    <td>{{ name }}</td>
+                    <td>{{ email }}</td>
+                    <td>{{ active }}</td>
+                </tr>
+            {{/each}}
+
+        </tbody>
+    </table>
+</div>

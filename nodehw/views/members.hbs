@@ -1,0 +1,31 @@
+<div>
+    <h2>{{ title }}</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Active</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each members }}
+
+                <tr>
+                    <td>
+                        <a href="members/{{ id }}">{{ id }}</a></td>
+                    <td>{{ name }}</td>
+                    <td>{{ email }}</td>
+
+                    {{#if active}}
+                        <td>Active</td>
+                    {{else}}
+                        <td>Inactive</td>
+                    {{/if}}
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
