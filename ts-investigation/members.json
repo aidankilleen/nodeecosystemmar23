@@ -31,28 +31,34 @@
             "active": false
         },
         {
-            "name": "Changed",
-            "email": "this was changed@gmail.com",
-            "active": false,
-            "id": 2
-        },
-        {
-            "name": "Changed",
-            "email": "this was changed@gmail.com",
-            "active": false,
-            "id": 2
-        },
-        {
-            "name": "Changed",
+            "name": "Ger",
             "email": "this was changed@gmail.com",
             "active": false,
             "id": 7
         },
         {
+            "name": "Ingrid",
+            "email": "this was changed@gmail.com",
+            "active": false,
+            "id": 8
+        },
+        {
+            "name": "John",
+            "email": "this was changed@gmail.com",
+            "active": false,
+            "id": 9
+        },
+        {
             "name": "Harriet",
             "email": "harriet@gmail.com",
             "active": true,
-            "id": 8
+            "id": 10
+        },
+        {
+            "name": "Karen",
+            "email": "karen@gmail.com",
+            "active": true,
+            "id": 11
         }
     ]
 }

@@ -1,0 +1,27 @@
+[
+    {
+        "id":1, 
+        "name": "book",
+        "description": "some book"
+    }, 
+    {
+        "id":2, 
+        "name": "this is Some paper",
+        "description": "a4 paper"
+    }, 
+    {
+        "id":3, 
+        "name": "stapler",
+        "description": "document stapler"
+    }, 
+    {
+        "id":4, 
+        "name": "sellotape",
+        "description": "sticky tape"
+    }, 
+    {
+        "id":5, 
+        "name": "paperclips",
+        "description": "100 paperclips"
+    } 
+]
