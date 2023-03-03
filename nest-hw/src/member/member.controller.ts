@@ -1,8 +1,10 @@
-import { BadRequestException, Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { Member } from '@prisma/client';
+import { MyJwtGuard } from 'src/my-jwt/my-jwt.guard';
 import { MemberService } from './member.service';
 
 @Controller('member')
+@UseGuards(MyJwtGuard)
 export class MemberController {
 
     private readonly logger = new Logger(MemberController.name);
